@@ -125,13 +125,18 @@ header.site.scrolled{
   border-bottom-color:rgba(255,255,255,.08);
   box-shadow:0 8px 22px rgba(0,0,0,.35);
 }
+header.site.menu-open{
+  background:var(--ink);
+  border-bottom-color:rgba(255,255,255,.08);
+  box-shadow:0 8px 22px rgba(0,0,0,.35);
+}
 header.site .wrap{
   display:flex;align-items:center;justify-content:space-between;
   padding-top:16px;padding-bottom:16px;gap:20px;
   min-height:var(--header-h);
 }
 .brand{display:flex;align-items:center;gap:12px;font-family:'Bungee',cursive;font-size:1.15rem;color:var(--white)}
-.brand img{height:46px;width:auto}
+.brand img{height:56px;width:auto}
 .brand small{display:block;font-family:'Work Sans',sans-serif;font-weight:600;font-size:.6rem;letter-spacing:.12em;color:var(--gray-400);text-transform:uppercase}
 
 nav.main-nav{display:flex;align-items:center;gap:28px}
@@ -159,6 +164,8 @@ nav.main-nav a:hover,nav.main-nav a.active{border-color:var(--red);color:var(--w
 
 .nav-toggle{display:none;background:none;border:1.5px solid rgba(255,255,255,.5);color:var(--white);border-radius:8px;padding:8px 10px;cursor:pointer}
 .nav-toggle svg{width:22px;height:22px}
+
+.desktop-only{display:none}
 
 /* extra block inside the nav drawer — phone number, mobile only */
 .nav-extra{display:none}
@@ -321,6 +328,9 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
 .crumbs span{opacity:.6}
 
 /* ---------- Responsive ---------- */
+@media (min-width:721px){
+  .desktop-only{display:inline-flex}
+}
 @media (max-width:960px){
   .grid-3,.testimonials,.feature-row,.grid-4{grid-template-columns:repeat(2,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr}
@@ -332,18 +342,18 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
 }
 @media (max-width:720px){
   nav.main-nav{position:fixed;inset:var(--header-h) 0 auto 0;background:var(--ink);flex-direction:column;align-items:flex-start;
-    padding:20px 24px 26px;border-bottom:1px solid rgba(255,255,255,.1);gap:16px;transform:translateY(-130%);transition:transform .25s ease;
+    padding:20px 24px 26px;border-bottom:1px solid rgba(255,255,255,.1);gap:16px;opacity:0;visibility:hidden;transition:opacity .3s ease, visibility .3s ease;
     box-shadow:0 16px 30px rgba(0,0,0,.35);}
+  nav.main-nav.open{opacity:1;visibility:visible}
   nav.main-nav a{font-size:1.05rem;width:100%}
-  nav.main-nav.open{transform:translateY(0)}
   .nav-toggle{display:inline-flex}
-  .header-cta .phone-pill{display:none}
-  .header-cta .btn{padding:.7em 1.1em;font-size:.72rem}
+  .desktop-only{display:none}
   .nav-extra{
     display:flex;flex-direction:column;gap:14px;width:100%;
     margin-top:6px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);
   }
   .nav-extra .phone-pill{font-size:1rem;color:var(--white)}
+  .nav-extra .btn{width:100%;text-align:center}
   .grid-2{grid-template-columns:1fr}
   .grid-3,.testimonials,.feature-row,.grid-4{grid-template-columns:1fr}
   .event-grid{grid-template-columns:repeat(3,1fr);gap:8px}

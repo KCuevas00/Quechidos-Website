@@ -3,12 +3,16 @@ document.addEventListener('DOMContentLoaded', function () {
   var nav = document.querySelector('.main-nav');
   var header = document.querySelector('header.site');
   
-  if (toggle && nav) {
+  if (toggle && nav && header) {
     toggle.addEventListener('click', function () {
       nav.classList.toggle('open');
+      header.classList.toggle('menu-open');
     });
     nav.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () { nav.classList.remove('open'); });
+      a.addEventListener('click', function () { 
+        nav.classList.remove('open'); 
+        header.classList.remove('menu-open');
+      });
     });
   }
   
