@@ -27,6 +27,7 @@
 html{scroll-behavior:smooth}
 body{
   margin:0;
+  overflow-x:hidden;
   background:var(--masa);
   color:var(--ink);
   font-family:'Work Sans',sans-serif;
@@ -133,10 +134,14 @@ nav.main-nav a:hover,nav.main-nav a.active{border-color:var(--marigold);color:va
 .nav-toggle{display:none;background:none;border:2px solid var(--ink);border-radius:8px;padding:8px 10px;cursor:pointer}
 .nav-toggle svg{width:22px;height:22px}
 
+/* extra block inside the nav drawer — phone + socials, mobile only */
+.nav-extra{display:none}
+
 /* ---------- Hero ---------- */
 .hero{
   position:relative;color:var(--masa);
   background:var(--ink);
+  overflow:hidden;
 }
 .hero-media{
   position:relative;min-height:78vh;display:flex;align-items:flex-end;
@@ -146,16 +151,20 @@ nav.main-nav a:hover,nav.main-nav a.active{border-color:var(--marigold);color:va
   content:"";position:absolute;inset:0;
   background:linear-gradient(0deg,rgba(20,15,12,.92) 5%,rgba(20,15,12,.45) 55%,rgba(20,15,12,.25));
 }
-.hero-inner{position:relative;z-index:2;padding:60px 0 68px}
+.hero-inner{position:relative;z-index:2;padding:60px 0 68px;max-width:640px}
 .hero .eyebrow{color:var(--marigold)}
 .hero h1{
-  font-size:clamp(2.4rem,6vw,4.4rem);
+  font-size:clamp(2.1rem,5.2vw,4.4rem);
+  line-height:1.08;
   color:var(--masa);
   text-shadow:0 4px 0 rgba(0,0,0,.25);
+  max-width:12ch;
 }
-.hero p.lead{max-width:520px;font-size:1.1rem;color:var(--masa-dim)}
+.hero p.lead{max-width:480px;font-size:1.05rem;color:var(--masa-dim)}
 .hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-top:26px}
-.hero--small .hero-media{min-height:46vh}
+.hero--small .hero-media{min-height:40vh}
+.hero--small .hero-inner{padding:40px 0 44px}
+.hero--small h1{max-width:none}
 
 /* ---------- Cards / grids ---------- */
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
@@ -176,11 +185,15 @@ nav.main-nav a:hover,nav.main-nav a.active{border-color:var(--marigold);color:va
 .card-cta a{font-weight:800;color:var(--agave);font-size:.85rem;letter-spacing:.02em}
 .card-cta a:hover{color:var(--agave-dark)}
 
-.chip-row{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}
-.chip{
-  background:var(--masa-dim);border:2px solid var(--ink);border-radius:100px;
-  padding:.5em 1.1em;font-weight:700;font-size:.85rem;
+.event-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}
+.event-card{
+  background:#fff;border-radius:12px;padding:16px 8px;text-align:center;
+  border:1px solid rgba(33,26,22,.08);box-shadow:0 4px 14px rgba(33,26,22,.05);
+  transition:transform .15s ease,box-shadow .15s ease;
 }
+.event-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.event-card .ic{font-size:1.5rem;display:block;margin-bottom:6px}
+.event-card .label{font-weight:700;font-size:.78rem;letter-spacing:.01em;color:var(--ink-soft)}
 
 .band{background:var(--agave);color:var(--masa)}
 .band .eyebrow{color:var(--marigold)}
@@ -193,14 +206,18 @@ nav.main-nav a:hover,nav.main-nav a.active{border-color:var(--marigold);color:va
 .feature-row .feature img{width:76px;height:76px;object-fit:cover;border-radius:50%;margin:0 auto 14px;border:4px solid var(--marigold)}
 .feature h4{font-size:.95rem}
 
-.testimonials{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.tcard{background:#fff;border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);border-top:5px solid var(--marigold)}
-.tcard .stars{color:var(--marigold);letter-spacing:2px;margin-bottom:8px}
-.tcard p{font-size:.92rem;color:var(--ink-soft)}
-.tcard .who{display:flex;align-items:center;gap:10px;margin-top:10px}
-.tcard .who img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.tcard{background:#fff;border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);border-top:5px solid var(--marigold);display:flex;flex-direction:column}
+.tcard .stars{color:var(--marigold);letter-spacing:2px;margin-bottom:8px;font-size:.9rem}
+.tcard p{font-size:.92rem;color:var(--ink-soft);flex:1}
+.tcard .who{display:flex;align-items:center;gap:10px;margin-top:14px}
+.avatar-initials{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bungee',cursive;font-size:.78rem;color:#fff;
+}
 .tcard .who strong{display:block;font-size:.88rem}
-.tcard .who span{font-size:.75rem;color:var(--agave)}
+.tcard .who span{font-size:.72rem;color:var(--agave)}
 
 /* ---------- Menu page ---------- */
 .menu-item{
@@ -290,13 +307,28 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
   .gallery-grid{grid-template-columns:repeat(3,1fr)}
 }
 @media (max-width:720px){
+  .topbar{display:none}
   nav.main-nav{position:fixed;inset:64px 0 auto 0;background:var(--masa);flex-direction:column;align-items:flex-start;
-    padding:20px 24px 26px;border-bottom:3px solid var(--ink);gap:14px;transform:translateY(-130%);transition:transform .25s ease;}
+    padding:20px 24px 26px;border-bottom:3px solid var(--ink);gap:16px;transform:translateY(-130%);transition:transform .25s ease;
+    box-shadow:0 16px 30px rgba(33,26,22,.15);}
+  nav.main-nav a{font-size:1.05rem;width:100%}
   nav.main-nav.open{transform:translateY(0)}
   .nav-toggle{display:inline-flex}
-  .header-cta .phone-pill span{display:none}
+  .header-cta .phone-pill{display:none}
+  .header-cta .btn{padding:.75em 1.2em;font-size:.75rem}
+  .nav-extra{
+    display:flex;flex-direction:column;gap:14px;width:100%;
+    margin-top:6px;padding-top:18px;border-top:1px solid var(--masa-dim);
+  }
+  .nav-extra .phone-pill{font-size:1rem;color:var(--ink)}
+  .nav-extra .social-row{display:flex;gap:16px}
+  .nav-extra .social-row a{font-weight:700;font-size:.85rem;color:var(--agave-dark)}
   .grid-2{grid-template-columns:1fr}
   .grid-3,.testimonials,.feature-row,.grid-4{grid-template-columns:1fr}
+  .event-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .event-card{padding:12px 4px}
+  .event-card .ic{font-size:1.25rem}
+  .event-card .label{font-size:.68rem}
   .footer-grid{grid-template-columns:1fr}
   .gallery-grid{grid-template-columns:repeat(2,1fr)}
   .section{padding:56px 0}
