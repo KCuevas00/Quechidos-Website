@@ -166,7 +166,6 @@ nav.main-nav a:hover,nav.main-nav a.active{border-color:var(--red);color:var(--w
 /* ---------- Hero ---------- */
 .hero{
   position:relative;color:var(--white);
-  background:var(--ink);
   overflow:hidden;
 }
 .hero-media{
