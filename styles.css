@@ -184,7 +184,7 @@ header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
   overflow:hidden;
 }
 .hero-media{
-  position:relative;min-height:82vh;display:flex;align-items:flex-end;
+  position:relative;min-height:95vh;display:flex;align-items:flex-end;
   background-size:cover;background-position:center;
 }
 .hero-video{
