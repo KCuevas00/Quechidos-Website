@@ -136,7 +136,8 @@ header.site .wrap{
   min-height:var(--header-h);
 }
 .brand{display:flex;align-items:center;gap:12px;font-family:'Bungee',cursive;font-size:1.15rem;color:var(--white)}
-.brand img{height:56px;width:auto}
+.brand img{height:64px;width:auto;transition:height .3s ease}
+header.site.scrolled .brand img{height:46px}
 .brand small{display:block;font-family:'Work Sans',sans-serif;font-weight:600;font-size:.6rem;letter-spacing:.12em;color:var(--gray-400);text-transform:uppercase}
 
 nav.main-nav{display:flex;align-items:center;gap:28px}
@@ -162,8 +163,15 @@ nav.main-nav a:hover,nav.main-nav a.active{border-color:var(--red);color:var(--w
 .social-icons a:hover{background:rgba(255,255,255,.12);border-color:#fff}
 .social-icons svg{width:15px;height:15px;fill:currentColor}
 
-.nav-toggle{display:none;background:none;border:1.5px solid rgba(255,255,255,.5);color:var(--white);border-radius:8px;padding:8px 10px;cursor:pointer}
-.nav-toggle svg{width:22px;height:22px}
+.nav-toggle{
+  display:none;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.28);
+  color:var(--white);border-radius:10px;width:44px;height:44px;padding:0;cursor:pointer;
+  transition:background .2s ease, border-color .2s ease;
+}
+.nav-toggle:hover{background:rgba(255,255,255,.16)}
+.nav-toggle svg{width:20px;height:20px}
+header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
 
 .desktop-only{display:none}
 
@@ -243,11 +251,12 @@ nav.main-nav a:hover,nav.main-nav a.active{border-color:var(--red);color:var(--w
 .tcard .stars{color:var(--red);letter-spacing:2px;margin-bottom:8px;font-size:.9rem}
 .tcard p{font-size:.92rem;color:var(--gray-700);flex:1}
 .tcard .who{display:flex;align-items:center;gap:10px;margin-top:14px}
-.avatar-initials{
+.avatar-fb{
   width:40px;height:40px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Bungee',cursive;font-size:.78rem;color:#fff;
+  background:#EEF1F5;border:1.5px solid var(--gray-200);
 }
+.avatar-fb svg{width:19px;height:19px;fill:#1877F2}
 .tcard .who strong{display:block;font-size:.88rem}
 .tcard .who span{font-size:.72rem;color:var(--gray-500)}
 
@@ -350,25 +359,32 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
   .nav-toggle{display:inline-flex}
   .desktop-only{display:none}
   .nav-extra{
-    display:flex;flex-direction:column;gap:14px;width:100%;
-    margin-top:6px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);
+    display:flex;flex-direction:column;gap:10px;width:100%;
+    margin-top:8px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);
   }
-  .nav-extra .phone-pill{
-    font-size:1.1rem;color:var(--white);
-    background:var(--red);
-    padding:12px 16px;
-    border-radius:8px;
-    justify-content:center;
-    font-weight:700;
-  }
-  .nav-extra .phone-pill svg{fill:var(--white)}
+  .nav-extra .phone-pill,
   .nav-extra .btn{
     width:100%;
+    justify-content:center;
     text-align:center;
-    background:var(--white);
-    color:var(--ink);
-    font-weight:800;
-    padding:12px 16px;
+    border-radius:100px;
+    padding:13px 18px;
+    font-size:.95rem;
+  }
+  .nav-extra .phone-pill{
+    color:var(--white);
+    background:rgba(255,255,255,.08);
+    border:1.5px solid rgba(255,255,255,.28);
+    font-weight:700;
+    font-family:'Work Sans',sans-serif;
+    letter-spacing:.02em;
+  }
+  .nav-extra .phone-pill svg{fill:var(--red);width:17px;height:17px}
+  .nav-extra .btn{
+    background:var(--red);
+    color:var(--white);
+    font-weight:700;
+    box-shadow:0 8px 20px rgba(140,27,27,.35);
   }
   .grid-2{grid-template-columns:1fr}
   .grid-3,.testimonials,.feature-row,.grid-4{grid-template-columns:1fr}
