@@ -237,7 +237,28 @@ header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
 }
 .hero-media::after{
   content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(0deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 22%);
+  background:linear-gradient(0deg,rgba(0,0,0,.92) 5%,rgba(0,0,0,.5) 55%,rgba(0,0,0,.3));
+}
+.hero-video-toggle{
+  position:absolute;bottom:24px;left:24px;z-index:10;
+  width:48px;height:48px;background:rgba(0,0,0,.5);
+  border:1.5px solid rgba(255,255,255,.3);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .2s ease,border-color .2s ease;
+}
+.hero-video-toggle:hover{
+  background:rgba(0,0,0,.7);border-color:rgba(255,255,255,.5);
+}
+.hero-video-toggle svg{width:20px;height:20px;fill:var(--white)}
+.scroll-indicator{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  z-index:10;display:none;animation:bounce 2s infinite;
+}
+.scroll-indicator svg{width:32px;height:32px;color:var(--white);opacity:.8}
+@keyframes bounce{
+  0%,20%,50%,80%,100%{transform:translateX(-50%) translateY(0)}
+  40%{transform:translateX(-50%) translateY(-10px)}
+  60%{transform:translateX(-50%) translateY(-5px)}
 }
 .hero-inner{position:relative;z-index:2;padding:60px 0 68px;max-width:640px}
 .hero .eyebrow{color:var(--gray-400)}
@@ -427,6 +448,24 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
 .footer-socials a:hover{border-color:var(--white);color:var(--white)}
 .footer-socials svg{width:15px;height:15px;fill:currentColor}
 .footer-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:20px;display:flex;justify-content:space-between;font-size:.8rem;color:var(--gray-500)}
+
+/* ---------- Floating Contact Button ---------- */
+.floating-contact{
+  position:fixed;bottom:24px;right:24px;z-index:100;
+  width:56px;height:56px;background:var(--red);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(140,27,27,.4);
+  transition:transform .2s ease,background .2s ease;
+}
+.floating-contact:hover{
+  transform:scale(1.08);background:var(--red-dark);
+}
+.floating-contact svg{width:28px;height:28px;fill:var(--white)}
+@media (max-width:720px){
+  .floating-contact{bottom:20px;right:20px;width:50px;height:50px}
+  .floating-contact svg{width:24px;height:24px}
+  .scroll-indicator{display:block}
+}
 
 /* ---------- Breadcrumb ---------- */
 .crumbs{font-size:.85rem;color:var(--gray-200);display:flex;gap:8px;align-items:center;margin-top:10px}

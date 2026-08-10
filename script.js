@@ -72,4 +72,26 @@ document.addEventListener('DOMContentLoaded', function () {
       if (e.key === 'ArrowRight') show(current + 1);
     });
   }
+
+  // ---------- Hero video toggle ----------
+  var videoToggle = document.querySelector('.hero-video-toggle');
+  var heroVideo = document.querySelector('.hero-video--main');
+  var iconPause = document.querySelector('.icon-pause');
+  var iconPlay = document.querySelector('.icon-play');
+  
+  if (videoToggle && heroVideo) {
+    videoToggle.addEventListener('click', function () {
+      if (heroVideo.paused) {
+        heroVideo.play();
+        iconPause.style.display = 'block';
+        iconPlay.style.display = 'none';
+        videoToggle.setAttribute('aria-label', 'Pause video');
+      } else {
+        heroVideo.pause();
+        iconPause.style.display = 'none';
+        iconPlay.style.display = 'block';
+        videoToggle.setAttribute('aria-label', 'Play video');
+      }
+    });
+  }
 });
