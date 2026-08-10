@@ -22,7 +22,7 @@
   --max:1180px;
   --radius:14px;
   --shadow:0 12px 30px rgba(0,0,0,.14);
-  --header-h:76px;
+  --header-h:96px;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -53,18 +53,20 @@ ul{margin:0;padding:0;list-style:none}
   display:inline-block;
   margin-bottom:.5em;
 }
+/* Diamond-cut lattice — a nod to the papel picado bunting used in .bunting,
+   at very low opacity so it reads as texture rather than pattern. */
 .section{
   padding:88px 0;
   position:relative;
   background-color:var(--white);
-  background-image:radial-gradient(rgba(18,18,18,.055) 1.5px, transparent 1.5px);
-  background-size:26px 26px;
+  background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='42'%20height='42'%3E%3Cpath%20d='M21%203%20L39%2021%20L21%2039%20L3%2021%20Z'%20fill='none'%20stroke='rgba(140,27,27,0.05)'%20stroke-width='1'/%3E%3C/svg%3E");
+  background-size:42px 42px;
 }
 .section--tight{padding:56px 0}
 .section--off{
   background-color:var(--off-white);
-  background-image:radial-gradient(rgba(18,18,18,.06) 1.5px, transparent 1.5px);
-  background-size:26px 26px;
+  background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='42'%20height='42'%3E%3Cpath%20d='M21%203%20L39%2021%20L21%2039%20L3%2021%20Z'%20fill='none'%20stroke='rgba(140,27,27,0.065)'%20stroke-width='1'/%3E%3C/svg%3E");
+  background-size:42px 42px;
 }
 .center{text-align:center}
 
@@ -119,6 +121,19 @@ ul{margin:0;padding:0;list-style:none}
     radial-gradient(circle at 10px 0, transparent 12px, var(--ink) 13px) 0 -13px/24px 26px repeat-x;
 }
 
+/* Alternate background texture — small overlapping scales, like a row of
+   papel picado edges repeated into a field. Swap in with class="section
+   section--scale" (or "section--off section--scale") in place of the
+   diamond lattice above if you want a rounder, softer feel. */
+.section--scale{
+  background-image:
+    radial-gradient(circle at 100% 50%, transparent 9px, rgba(140,27,27,.05) 10px, rgba(140,27,27,.05) 11px, transparent 12px) -11px 0,
+    radial-gradient(circle at 0% 50%, transparent 9px, rgba(140,27,27,.05) 10px, rgba(140,27,27,.05) 11px, transparent 12px) -11px 0,
+    radial-gradient(circle at 100% 50%, transparent 9px, rgba(140,27,27,.05) 10px, rgba(140,27,27,.05) 11px, transparent 12px) 0 11px,
+    radial-gradient(circle at 0% 50%, transparent 9px, rgba(140,27,27,.05) 10px, rgba(140,27,27,.05) 11px, transparent 12px) 0 11px;
+  background-size:22px 22px;
+}
+
 /* ---------- Header ----------
    Fixed at all times. Transparent (overlaying the hero) at the
    very top of the page; gains a solid dark background + shadow
@@ -147,8 +162,8 @@ header.site .wrap{
   min-height:var(--header-h);
 }
 .brand{display:flex;align-items:center;gap:12px;font-family:'Bungee',cursive;font-size:1.15rem;color:var(--white)}
-.brand img{height:64px;width:auto;transition:height .3s ease}
-header.site.scrolled .brand img{height:46px}
+.brand img{height:84px;width:auto;transition:height .3s ease}
+header.site.scrolled .brand img{height:52px}
 .brand small{display:block;font-family:'Work Sans',sans-serif;font-weight:600;font-size:.6rem;letter-spacing:.12em;color:var(--gray-400);text-transform:uppercase}
 
 nav.main-nav{display:flex;align-items:center;gap:28px}
@@ -197,14 +212,32 @@ header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
 .hero-media{
   position:relative;min-height:95vh;display:flex;align-items:flex-end;
   background-size:cover;background-position:center;
+  overflow:hidden;background-color:var(--ink);
 }
-.hero-video{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;z-index:0;
+/* Source clip is portrait. Stretching it edge-to-edge on wide screens
+   forces a big upscale and it turns soft. Instead: a blurred, scaled-up
+   copy fills the frame as a backdrop, and the real clip sits centered
+   at its true aspect ratio on top, so it always stays sharp. */
+.hero-video{position:absolute;z-index:0}
+.hero-video--backdrop{
+  inset:0;width:100%;height:100%;object-fit:cover;
+  filter:blur(50px) brightness(.55) saturate(1.15);
+  transform:scale(1.2);
+}
+.hero-video--main{
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  height:100%;width:auto;max-width:none;z-index:1;
+  box-shadow:0 0 120px rgba(0,0,0,.5);
+}
+@media (min-aspect-ratio:9/14){
+  /* On very wide screens even a full-height clip would run narrow;
+     let it grow a little past 100% height so it still reads as a
+     presence in the frame rather than a sliver. */
+  .hero-video--main{height:112%}
 }
 .hero-media::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.15) 32%,rgba(0,0,0,0) 55%);
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(0deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 22%);
 }
 .hero-inner{position:relative;z-index:2;padding:60px 0 68px;max-width:640px}
 .hero .eyebrow{color:var(--gray-400)}
@@ -216,15 +249,6 @@ header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
 }
 .hero p.lead{max-width:480px;font-size:1.05rem;color:var(--gray-200)}
 .hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-top:26px}
-
-/* Minimal hero: video is the whole story, only a single CTA sits on top */
-.hero-inner--minimal{
-  max-width:none;
-  padding:0 0 56px;
-  display:flex;
-  justify-content:center;
-}
-.hero-inner--minimal .btn{font-size:.95rem;padding:1.05em 2.1em}
 .hero--small .hero-media{min-height:52vh}
 .hero--small .hero-inner{padding:40px 0 44px}
 .hero--small h1{max-width:none}
@@ -422,6 +446,9 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
   .gallery-grid{grid-template-columns:repeat(3,1fr)}
 }
 @media (max-width:720px){
+  header.site{--header-h:88px}
+  .brand img{height:56px}
+  header.site.scrolled .brand img{height:42px}
   nav.main-nav{position:fixed;inset:var(--header-h) 0 auto 0;background:var(--ink);flex-direction:column;align-items:flex-start;
     padding:20px 24px 26px;border-bottom:1px solid rgba(255,255,255,.1);gap:16px;opacity:0;visibility:hidden;transition:opacity .3s ease, visibility .3s ease;
     box-shadow:0 16px 30px rgba(0,0,0,.35);}
