@@ -53,8 +53,19 @@ ul{margin:0;padding:0;list-style:none}
   display:inline-block;
   margin-bottom:.5em;
 }
-.section{padding:88px 0}
+.section{
+  padding:88px 0;
+  position:relative;
+  background-color:var(--white);
+  background-image:radial-gradient(rgba(18,18,18,.055) 1.5px, transparent 1.5px);
+  background-size:26px 26px;
+}
 .section--tight{padding:56px 0}
+.section--off{
+  background-color:var(--off-white);
+  background-image:radial-gradient(rgba(18,18,18,.06) 1.5px, transparent 1.5px);
+  background-size:26px 26px;
+}
 .center{text-align:center}
 
 /* ---------- Buttons ---------- */
@@ -193,7 +204,7 @@ header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
 }
 .hero-media::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(0deg,rgba(0,0,0,.92) 5%,rgba(0,0,0,.5) 55%,rgba(0,0,0,.3));
+  background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.15) 32%,rgba(0,0,0,0) 55%);
 }
 .hero-inner{position:relative;z-index:2;padding:60px 0 68px;max-width:640px}
 .hero .eyebrow{color:var(--gray-400)}
@@ -205,11 +216,37 @@ header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
 }
 .hero p.lead{max-width:480px;font-size:1.05rem;color:var(--gray-200)}
 .hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-top:26px}
+
+/* Minimal hero: video is the whole story, only a single CTA sits on top */
+.hero-inner--minimal{
+  max-width:none;
+  padding:0 0 56px;
+  display:flex;
+  justify-content:center;
+}
+.hero-inner--minimal .btn{font-size:.95rem;padding:1.05em 2.1em}
 .hero--small .hero-media{min-height:52vh}
 .hero--small .hero-inner{padding:40px 0 44px}
 .hero--small h1{max-width:none}
 
 /* ---------- Cards / grids ---------- */
+/* ---------- Stacked photo pair (about/home intro sections) ---------- */
+.stack-photos{position:relative;padding-bottom:36px}
+.stack-photos img{
+  display:block;width:100%;object-fit:cover;
+  border-radius:14px;box-shadow:var(--shadow);
+}
+.stack-photos .photo-main{aspect-ratio:4/5}
+.stack-photos .photo-accent{
+  position:absolute;right:0;bottom:0;
+  width:58%;aspect-ratio:5/4;
+  border:6px solid var(--white);
+}
+@media (max-width:720px){
+  .stack-photos{padding-bottom:28px}
+  .stack-photos .photo-accent{width:62%;border-width:5px}
+}
+
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
