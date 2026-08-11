@@ -174,12 +174,15 @@ document.addEventListener('DOMContentLoaded', function () {
       controls.innerHTML = sizeHTML + '<div class="qty-wrap"><button class="qty-btn qty-decrease" type="button">−</button>' +
                            '<label class="estimator-label">Qty <input type="number" min="0" value="0" class="menu-qty" aria-label="Quantity for '+name+'"></label>' +
                            '<button class="qty-btn qty-increase" type="button">+</button></div>' +
-                           '<div class="estimator-error" aria-live="polite" style="display:none"></div>';
+                           '<div class="estimator-price" aria-hidden="true">' + formatCurrency(price) + '</div>' +
+                           '<div class="estimator-error" role="alert" aria-live="assertive"></div>';
       var body = itemEl.querySelector('.menu-item-body');
+      // append controls at the bottom of the package body (better for min errors)
       if (body) body.appendChild(controls);
 
       var input = controls.querySelector('.menu-qty');
       var err = controls.querySelector('.estimator-error');
+      var priceDisplay = controls.querySelector('.estimator-price');
       // ensure numeric step and allow zero to clear
       input.setAttribute('min', '0');
       input.setAttribute('step', '1');
@@ -210,10 +213,10 @@ document.addEventListener('DOMContentLoaded', function () {
       input.addEventListener('input', function (e) {
         var v = parseInt(e.target.value, 10) || 0;
         if (v > 0 && min > 0 && v < min) {
-          if (err) { err.textContent = 'MINIMUM VALUE ' + min; err.style.display = 'block'; }
+          if (err) { err.textContent = 'MINIMUM VALUE ' + min; err.classList.add('visible'); }
           delete cart[name];
         } else {
-          if (err) { err.textContent = ''; err.style.display = 'none'; }
+          if (err) { err.textContent = ''; err.classList.remove('visible'); }
           if (v === 0) delete cart[name]; else {
             cart[name] = { name: name, price: currentPriceForSelection(), qty: v, img: imgSrc };
             if (sizeSelect) cart[name].size = sizeSelect.value;
@@ -224,6 +227,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (sizeSelect) {
         sizeSelect.addEventListener('change', function () {
+          // update displayed unit price
+          if (priceDisplay) priceDisplay.textContent = formatCurrency(currentPriceForSelection());
           // when size changes update stored price if qty > 0
           var v = parseInt(input.value, 10) || 0;
           if (v > 0) {
@@ -236,12 +241,22 @@ document.addEventListener('DOMContentLoaded', function () {
       // stepper handlers
       var dec = controls.querySelector('.qty-decrease');
       var inc = controls.querySelector('.qty-increase');
+      // add accessible labels and keyboard support
+      dec.setAttribute('aria-label', 'Decrease quantity for ' + name);
+      inc.setAttribute('aria-label', 'Increase quantity for ' + name);
       dec.addEventListener('click', function () {
         var val = parseInt(input.value, 10) || 0; val = Math.max(0, val - 1); input.value = val; input.dispatchEvent(new Event('input'));
       });
       inc.addEventListener('click', function () {
         var val = parseInt(input.value, 10) || 0; val = val + 1; input.value = val; input.dispatchEvent(new Event('input'));
       });
+      // keyboard handling on the numeric input
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowUp' || e.key === '+') { e.preventDefault(); inc.click(); }
+        if (e.key === 'ArrowDown' || e.key === '-') { e.preventDefault(); dec.click(); }
+      });
+      // update price display on init
+      if (priceDisplay) priceDisplay.textContent = formatCurrency(currentPriceForSelection());
     }
 
     function generateReceiptText() {
@@ -263,23 +278,45 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!panel) {
         panel = document.createElement('aside');
           panel.className = 'receipt-panel';
-          panel.innerHTML = '<div class="receipt-header"><h4>Your Estimate</h4><button class="receipt-close" aria-label="Close">×</button></div>' +
+          panel.innerHTML = '<div class="receipt-header"><h4>Your Estimate</h4><div class="receipt-header-tools">' +
+            '<button class="receipt-close" aria-label="Close">×</button></div></div>' +
             '<div class="receipt-body"></div>' +
             '<div class="receipt-footer"><div class="receipt-total">Total: <strong class="receipt-total-value">$0.00</strong></div>' +
-            '<div class="receipt-disclaimer">*** THIS IS JUST AN ESTIMATE ***<br>Taxes &amp; fees not included — call (224) 436-2509 for a more accurate estimate.</div>' +
+            '<div class="receipt-disclaimer">*** THIS IS JUST AN ESTIMATE ***<br>Taxes &amp; fees are estimates — call (224) 436-2509 for a more accurate estimate.</div>' +
             '<div class="receipt-actions"><button class="btn btn--white receipt-clear" type="button">Clear</button>' +
             '<a class="btn btn--ink receipt-request" href="receipt.html">View Receipt</a></div></div>';
         document.body.appendChild(panel);
 
-        panel.querySelector('.receipt-close').addEventListener('click', function () { panel.classList.toggle('open'); });
+        // create a top-right cart toggle button if needed
+        var cartToggle = document.querySelector('.receipt-cart-toggle');
+        if (!cartToggle) {
+          cartToggle = document.createElement('button');
+          cartToggle.className = 'receipt-cart-toggle';
+          cartToggle.type = 'button';
+          cartToggle.setAttribute('aria-label', 'Toggle estimate cart');
+          cartToggle.setAttribute('aria-pressed', 'false');
+          cartToggle.innerHTML = '<svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h12l1 3H5l1-3zm0 5h14v14H5V7zm3 2a3 3 0 0 1 6 0v1h-2V9a1 1 0 0 0-2 0v1H9V9z"/></svg><span class="receipt-badge" aria-hidden="true">0</span>';
+          document.body.appendChild(cartToggle);
+          cartToggle.addEventListener('click', function () {
+            var open = panel.classList.toggle('open');
+            cartToggle.setAttribute('aria-pressed', open ? 'true' : 'false');
+          });
+        }
+
+        // header tools: close
+        var closeBtn = panel.querySelector('.receipt-close');
+        closeBtn.addEventListener('click', function () { panel.classList.toggle('open'); });
+
         panel.querySelector('.receipt-clear').addEventListener('click', function () { cart = {}; saveCart(); });
-        // View Receipt button: save current cart to localStorage and open receipt.html
         panel.querySelector('.receipt-request').addEventListener('click', function (e) {
           try { localStorage.setItem('qc_last_cart', JSON.stringify(cart || {})); } catch (er) {}
-          // open receipt.html in same site
           window.open('receipt.html', '_blank');
           e.preventDefault();
         });
+        var clearBtn = panel.querySelector('.receipt-clear');
+        var reqBtn = panel.querySelector('.receipt-request');
+        if (clearBtn) clearBtn.setAttribute('role','button');
+        if (reqBtn) reqBtn.setAttribute('role','button');
       }
 
       var body = panel.querySelector('.receipt-body');
@@ -308,6 +345,22 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       var totalEl = panel.querySelector('.receipt-total-value');
       if (totalEl) totalEl.textContent = formatCurrency(total || 0);
+      // update cart badge (sum of quantities)
+      var uniqueCount = Object.keys(cart).filter(function (n) { return (parseInt(cart[n].qty,10) || 0) > 0; }).length;
+      var badge = panel.querySelector('.receipt-badge');
+      if (badge) {
+        badge.textContent = uniqueCount || '';
+        badge.style.display = uniqueCount ? 'inline-block' : 'none';
+      }
+      var cartToggle = document.querySelector('.receipt-cart-toggle');
+      if (cartToggle) {
+        var toggleBadge = cartToggle.querySelector('.receipt-badge');
+        if (toggleBadge) {
+          toggleBadge.textContent = uniqueCount || '';
+          toggleBadge.style.display = uniqueCount ? 'inline-block' : 'none';
+        }
+        cartToggle.style.display = uniqueCount ? 'inline-flex' : 'none';
+      }
       // open panel when there are items
       if (Object.keys(cart).length) panel.classList.add('open'); else panel.classList.remove('open');
     }
