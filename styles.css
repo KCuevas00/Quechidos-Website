@@ -631,10 +631,12 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
 }
 
 /* ---------- Estimator / Receipt styles ---------- */
-.estimator-controls{margin-top:12px;display:flex;gap:8px;align-items:center}
+.estimator-controls{margin-top:12px;display:flex;gap:12px;align-items:center}
 .estimator-price{font-weight:700;color:var(--red);font-size:.98rem;white-space:nowrap;margin-left:6px}
-.estimator-controls .estimator-label{font-weight:700;font-size:.85rem;color:var(--gray-700);display:flex;align-items:center;gap:8px}
-.estimator-controls .menu-qty{width:80px;padding:8px;border-radius:8px;border:1.5px solid var(--gray-200);font-size:1rem}
+.estimator-controls .estimator-label{font-weight:700;font-size:.88rem;color:var(--gray-700);display:flex;align-items:center;gap:10px}
+.estimator-controls .menu-qty{width:90px;padding:10px;border-radius:10px;border:1.5px solid var(--gray-200);font-size:1.15rem;line-height:1.4;min-height:44px}
+.estimator-controls .menu-qty::-webkit-inner-spin-button,
+.estimator-controls .menu-qty::-webkit-outer-spin-button{margin:0}
 .estimator-error{color:var(--red);font-weight:700;font-size:.82rem;min-height:20px;margin-left:6px;visibility:hidden;opacity:0;transition:opacity .12s ease}
 .estimator-error.visible{visibility:visible;opacity:1}
 
@@ -674,7 +676,12 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
   .receipt-panel{left:12px;right:12px;bottom:12px;top:auto;width:auto;border-radius:12px}
   .receipt-panel.open{opacity:1}
   .estimator-controls{flex-wrap:wrap;grid-column:1/-1;justify-self:stretch;padding-right:0;margin-top:12px}
+  .estimator-controls .qty-wrap{flex-wrap:nowrap;justify-content:flex-start;align-items:center;gap:10px}
+  .estimator-controls .menu-qty{width:72px;max-width:72px;font-size:1.1rem;line-height:1.4}
+  .estimator-controls .qty-btn{padding:12px 16px;min-width:52px;font-size:1.05rem}
   .estimator-price{margin-top:6px}
+  .estimator-controls .estimator-label{display:flex;align-items:center;gap:6px;width:auto;justify-content:flex-start;flex:0 0 auto;white-space:nowrap;margin:0}
+  .estimator-controls .estimator-label input{width:72px;min-width:72px}
 }
 
 /* Extra compact / touch-friendly tweaks for small phones */
@@ -688,7 +695,7 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
   .receipt-row{padding:6px 0;gap:6px}
   .receipt-row-name{font-size:.92rem}
   .receipt-row-price{font-size:.95rem}
-  .receipt-row-qty input{width:64px;padding:8px;border-radius:8px}
+  .receipt-row-qty input{width:72px;padding:10px;border-radius:10px;font-size:1rem}
   .receipt-row-remove{padding:8px;margin-right:4px}
   .receipt-footer{padding:10px;gap:8px}
   .receipt-actions{flex-direction:row;gap:8px}

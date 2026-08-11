@@ -8,7 +8,20 @@
   <style>
     .receipt-doc{max-width:880px;margin:40px auto;padding:20px;background:var(--white);border-radius:12px;border:1px solid var(--gray-200);box-shadow:var(--shadow)}
     pre{white-space:pre-wrap;word-break:break-word;font-family:inherit}
+    .receipt-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:12px;width:100%}
+    .receipt-table{width:100%;border-collapse:collapse;min-width:520px}
+    .receipt-table th,.receipt-table td{padding:8px;word-break:break-word}
+    .receipt-table td:last-child,.receipt-table th:last-child{text-align:right;white-space:nowrap}
     .receipt-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+    @media (max-width:720px) {
+      .receipt-summary{flex-direction:column;align-items:flex-start}
+      .receipt-summary-right{min-width:auto;text-align:left;width:100%}
+      .receipt-summary-right > div{margin-bottom:10px}
+      .receipt-summary-right input{width:100%;max-width:140px}
+      .receipt-table{min-width:100%}
+      .receipt-table th:first-child,
+      .receipt-table td:first-child {display:none}
+    }
   </style>
 </head>
 <body>
@@ -22,17 +35,19 @@
         </div>
       </div>
       <div id="receipt-content">
-        <table class="receipt-table" style="width:100%;border-collapse:collapse;margin-top:12px">
-          <thead>
-            <tr style="text-align:left;border-bottom:2px solid var(--gray-200)"><th style="padding:8px;width:72px">Image</th><th style="padding:8px">Item</th><th style="padding:8px">Qty</th><th style="padding:8px">Unit</th><th style="padding:8px;text-align:right">Line</th></tr>
-          </thead>
-          <tbody id="receipt-items"></tbody>
-        </table>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:16px">
+        <div class="receipt-table-wrap" style="overflow-x:auto;">
+          <table class="receipt-table" style="width:100%;border-collapse:collapse;margin-top:12px">
+            <thead>
+              <tr style="text-align:left;border-bottom:2px solid var(--gray-200)"><th style="padding:8px;width:72px">Image</th><th style="padding:8px">Item</th><th style="padding:8px">Qty</th><th style="padding:8px">Unit</th><th style="padding:8px;text-align:right">Line</th></tr>
+            </thead>
+            <tbody id="receipt-items"></tbody>
+          </table>
+        </div>
+        <div class="receipt-summary" style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:16px">
           <div style="flex:1">
             <div class="receipt-disclaimer" style="text-align:left">*** THIS IS JUST AN ESTIMATE ***<br>Prices subject to change. Taxes &amp; fees are estimates — call (224) 436-2509 for a more accurate estimate.</div>
           </div>
-          <div style="text-align:right;min-width:260px">
+          <div class="receipt-summary-right" style="text-align:right;min-width:260px">
             <div style="margin-bottom:6px">Subtotal: <strong id="receipt-subtotal">$0.00</strong></div>
             <div style="margin-bottom:6px">Tax rate: <input id="taxRate" type="number" step="0.01" min="0" style="width:80px;padding:6px;border-radius:6px;border:1px solid var(--gray-200)" value="8.75"> %</div>
             <div style="margin-bottom:6px">Estimated tax: <strong id="receipt-tax">$0.00</strong></div>

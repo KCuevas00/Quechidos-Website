@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       // include stepper buttons
       controls.innerHTML = sizeHTML + '<div class="qty-wrap"><button class="qty-btn qty-decrease" type="button">−</button>' +
-                           '<label class="estimator-label">Qty <input type="number" min="0" value="0" class="menu-qty" aria-label="Quantity for '+name+'"></label>' +
+                           '<label class="estimator-label">Qty <input type="number" min="0" value="0" inputmode="numeric" pattern="[0-9]*" class="menu-qty" aria-label="Quantity for '+name+'"></label>' +
                            '<button class="qty-btn qty-increase" type="button">+</button></div>' +
                            '<div class="estimator-price" aria-hidden="true">' + formatCurrency(price) + '</div>' +
                            '<div class="estimator-error" role="alert" aria-live="assertive"></div>';
