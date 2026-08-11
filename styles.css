@@ -363,15 +363,24 @@ header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
 .extras-box{background:var(--off-white);border:2px dashed var(--gray-400);border-radius:var(--radius);padding:26px 28px;margin-top:10px}
 .extras-box h3{color:var(--ink)}
 
-/* ---------- Gallery ---------- */
+/* ---------- Gallery ----------
+   Zero-gap brick pattern, all tiles square (aspect-ratio 1/1), no
+   rounded corners. Repeats every 10 tiles: 1 big (2x2) → 4 small →
+   2 small → 1 big (2x2) → 2 small. */
 .gallery-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  width:100vw;
+  margin-left:calc(50% - 50vw);
 }
 .gallery-grid button,.gallery-grid a{
-  position:relative;overflow:hidden;border-radius:10px;aspect-ratio:1/1;display:block;
+  position:relative;overflow:hidden;border-radius:0;aspect-ratio:1/1;display:block;
   padding:0;border:0;background:none;cursor:zoom-in;width:100%;
 }
 .gallery-grid a{cursor:pointer}
+.gallery-grid button:nth-child(10n+1),.gallery-grid a:nth-child(10n+1),
+.gallery-grid button:nth-child(10n+8),.gallery-grid a:nth-child(10n+8){
+  grid-column:span 2;grid-row:span 2;
+}
 .gallery-grid img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease;filter:grayscale(.1)}
 .gallery-grid button:hover img,.gallery-grid a:hover img{transform:scale(1.08)}
 .gallery-grid button::after,.gallery-grid a::after{
@@ -483,7 +492,7 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
   .menu-item{grid-template-columns:1fr}
   .menu-item img{aspect-ratio:16/9}
   .menu-item-body{padding:20px}
-  .gallery-grid{grid-template-columns:repeat(3,1fr)}
+  .gallery-grid{grid-template-columns:repeat(4,1fr)}
 }
 @media (max-width:720px){
   header.site{--header-h:88px}
