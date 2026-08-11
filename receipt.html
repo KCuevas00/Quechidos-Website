@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Estimate Receipt | QueChido</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .receipt-doc{max-width:880px;margin:40px auto;padding:20px;background:var(--white);border-radius:12px;border:1px solid var(--gray-200);box-shadow:var(--shadow)}
+    pre{white-space:pre-wrap;word-break:break-word;font-family:inherit}
+    .receipt-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="receipt-doc">
+          <div style="display:flex;align-items:center;gap:12px">
+          <img src="photos/blackbglogo.png" alt="QueChido" style="height:56px;width:56px;object-fit:cover;border-radius:50%">
+        <div>
+          <h2 style="margin:0">QueChido Taco Catering — Estimate</h2>
+          <div style="font-size:.9rem;color:var(--gray-500)">Generated: <span id="receipt-date"></span></div>
+        </div>
+      </div>
+      <div id="receipt-content">
+        <table class="receipt-table" style="width:100%;border-collapse:collapse;margin-top:12px">
+          <thead>
+            <tr style="text-align:left;border-bottom:2px solid var(--gray-200)"><th style="padding:8px;width:72px">Image</th><th style="padding:8px">Item</th><th style="padding:8px">Qty</th><th style="padding:8px">Unit</th><th style="padding:8px;text-align:right">Line</th></tr>
+          </thead>
+          <tbody id="receipt-items"></tbody>
+        </table>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:16px">
+          <div style="flex:1">
+            <div class="receipt-disclaimer" style="text-align:left">*** THIS IS JUST AN ESTIMATE ***<br>Prices subject to change. Taxes &amp; fees are estimates — call (224) 436-2509 for a more accurate estimate.</div>
+          </div>
+          <div style="text-align:right;min-width:260px">
+            <div style="margin-bottom:6px">Subtotal: <strong id="receipt-subtotal">$0.00</strong></div>
+            <div style="margin-bottom:6px">Tax rate: <input id="taxRate" type="number" step="0.01" min="0" style="width:80px;padding:6px;border-radius:6px;border:1px solid var(--gray-200)" value="8.75"> %</div>
+            <div style="margin-bottom:6px">Estimated tax: <strong id="receipt-tax">$0.00</strong></div>
+            <div style="font-size:1.05rem">Total: <strong id="receipt-total">$0.00</strong></div>
+          </div>
+        </div>
+      </div>
+          <div class="receipt-actions">
+            <button id="copyBtn" class="btn btn--white">Copy</button>
+            <button id="printBtn" class="btn btn--ink">Save / Print</button>
+          </div>
+    </div>
+  </div>
+<script>
+(function(){
+  function formatCurrency(n){return '$'+(n||0).toFixed(2)}
+  function generateText(cart, taxPercent, taxAmount, grand) {
+    var lines=[];
+    var total=0;
+      Object.keys(cart||{}).forEach(function(k){
+        var it=cart[k];
+      var lineTotal=(it.price||0)*it.qty; total+=lineTotal;
+      var sizeTxt = it.size ? ' ('+it.size+')' : '';
+      lines.push(it.qty+' x '+it.name+sizeTxt+' @ '+formatCurrency(it.price||0)+' = '+formatCurrency(lineTotal));
+    });
+    lines.push('');
+    lines.push('Subtotal: '+formatCurrency(total));
+    if (typeof taxPercent === 'number') {
+      lines.push('Tax ('+ (taxPercent||0) +'%): '+formatCurrency(taxAmount||0));
+      lines.push('Total: '+formatCurrency(grand||total));
+    } else {
+      lines.push('Total: '+formatCurrency(total));
+    }
+    lines.push('');
+    lines.push('*** THIS IS JUST AN ESTIMATE ***');
+    lines.push('Prices subject to change. Taxes & fees are estimates — call (224) 436-2509 for a more accurate estimate.');
+    lines.push('');
+    lines.push('Phone: (224) 436-2509');
+    return lines.join('\n');
+  }
+
+  var cart=null;
+  try{cart=JSON.parse(localStorage.getItem('qc_last_cart')||localStorage.getItem('qc_cart')||'{}')||{}}catch(e){cart={}};
+  // set generated date
+  try { var d = new Date(); document.getElementById('receipt-date').textContent = d.toLocaleString(); } catch (e) {}
+
+  // render HTML table with images and compute tax
+  var tbody = document.getElementById('receipt-items');
+  var subtotal = 0;
+  Object.keys(cart||{}).forEach(function(k){
+    var it=cart[k];
+    var lineTotal=(it.price||0)*it.qty; subtotal+=lineTotal;
+    var tr = document.createElement('tr');
+    var imgCell = '<td style="padding:8px;border-bottom:1px solid var(--gray-200)">' + (it.img ? '<img src="'+it.img+'" alt="'+it.name+'" style="width:64px;height:44px;object-fit:cover;border-radius:6px">' : '') + '</td>';
+    tr.innerHTML = imgCell + '<td style="padding:8px;border-bottom:1px solid var(--gray-200)">' + it.name + (it.size ? ' <small>('+it.size+')</small>' : '') + '</td>' +
+                   '<td style="padding:8px;border-bottom:1px solid var(--gray-200)">' + it.qty + '</td>' +
+                   '<td style="padding:8px;border-bottom:1px solid var(--gray-200)">' + formatCurrency(it.price||0) + '</td>' +
+                   '<td style="padding:8px;border-bottom:1px solid var(--gray-200);text-align:right">' + formatCurrency(lineTotal) + '</td>';
+    tbody.appendChild(tr);
+  });
+  document.getElementById('receipt-subtotal').textContent = formatCurrency(subtotal);
+
+  var taxInput = document.getElementById('taxRate');
+  // default tax rate set in percent (Elgin, IL default)
+  var defaultTax = parseFloat(taxInput.value) || 0;
+  function updateTotals() {
+    var taxPercent = parseFloat(taxInput.value) || 0;
+    var taxAmount = subtotal * (taxPercent / 100);
+    var grand = subtotal + taxAmount;
+    document.getElementById('receipt-tax').textContent = formatCurrency(taxAmount);
+    document.getElementById('receipt-total').textContent = formatCurrency(grand);
+    // update plain-text version used for copy/download
+    text = generateText(cart, taxPercent, taxAmount, grand);
+  }
+  taxInput.addEventListener('input', updateTotals);
+  updateTotals();
+
+  document.getElementById('copyBtn').addEventListener('click',function(){
+    try{navigator.clipboard.writeText(text);}catch(e){alert('Copy failed');}
+  });
+  document.getElementById('printBtn').addEventListener('click',function(){ window.print(); });
+})();
+</script>
+</body>
+</html>

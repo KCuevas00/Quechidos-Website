@@ -123,4 +123,202 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  // ---------- Menu estimator / receipt ----------
+  (function () {
+    function parsePrice(text) {
+      if (!text) return 0;
+      var m = text.match(/\$?\s*([0-9]+(?:\.[0-9]+)?)/);
+      return m ? parseFloat(m[1]) : 0;
+    }
+
+    function formatCurrency(n) { return '$' + n.toFixed(2); }
+
+    // Do NOT persist the on-page estimate across refreshes. Start with an empty cart.
+    var cart = {};
+
+    function saveCart() { renderReceipt(); }
+
+    function createEstimatorControls(itemEl) {
+      var nameEl = itemEl.querySelector('h3');
+      if (!nameEl) return;
+      var name = nameEl.textContent.trim();
+      var priceTextEl = itemEl.querySelector('.price');
+      var price = priceTextEl ? parsePrice(priceTextEl.textContent) : 0;
+      // prefer explicit data-price attributes when present
+      var dp = itemEl.dataset.price ? parseFloat(itemEl.dataset.price) : null;
+      var priceSmall = itemEl.dataset.priceSmall ? parseFloat(itemEl.dataset.priceSmall) : null;
+      var priceLarge = itemEl.dataset.priceLarge ? parseFloat(itemEl.dataset.priceLarge) : null;
+      if (dp) price = dp;
+      // parse a minimum people count from price text, like "minimum 35 people"
+      var min = 0;
+      if (priceTextEl && priceTextEl.textContent) {
+        var mm = priceTextEl.textContent.match(/minimum\s*(?:of\s*)?(?:[:\-\s]*)?(\d+)/i) || priceTextEl.textContent.match(/min(?:imum)?\s*(?:[:\-\s]*)?(\d+)/i);
+        if (mm) min = parseInt(mm[1], 10) || 0;
+      }
+      itemEl.dataset.name = name;
+      itemEl.dataset.price = price;
+      var imgSrc = '';
+      var imgEl = itemEl.querySelector('img');
+      if (imgEl) imgSrc = imgEl.src;
+      itemEl.dataset.min = min;
+
+      var controls = document.createElement('div');
+      controls.className = 'estimator-controls';
+      // build size selector if needed
+      var sizeHTML = '';
+      if (priceSmall && priceLarge) {
+        sizeHTML = '<label class="estimator-size-label">Size <select class="estimator-size"><option value="small">Small ($' + priceSmall + ')</option><option value="large">Large ($' + priceLarge + ')</option></select></label>';
+      }
+      // include stepper buttons
+      controls.innerHTML = sizeHTML + '<div class="qty-wrap"><button class="qty-btn qty-decrease" type="button">−</button>' +
+                           '<label class="estimator-label">Qty <input type="number" min="0" value="0" class="menu-qty" aria-label="Quantity for '+name+'"></label>' +
+                           '<button class="qty-btn qty-increase" type="button">+</button></div>' +
+                           '<div class="estimator-error" aria-live="polite" style="display:none"></div>';
+      var body = itemEl.querySelector('.menu-item-body');
+      if (body) body.appendChild(controls);
+
+      var input = controls.querySelector('.menu-qty');
+      var err = controls.querySelector('.estimator-error');
+      // ensure numeric step and allow zero to clear
+      input.setAttribute('min', '0');
+      input.setAttribute('step', '1');
+      // preload quantity if present in cart, and enforce minimum if saved qty is below min
+      var selectedSize = (priceSmall && priceLarge) ? 'small' : null;
+      var sizeSelect = controls.querySelector('.estimator-size');
+      if (sizeSelect) {
+        sizeSelect.value = selectedSize;
+      }
+      if (cart[name]) {
+        var saved = parseInt(cart[name].qty, 10) || 0;
+        if (saved > 0 && min > 0 && saved < min) saved = min;
+        input.value = saved;
+        if (cart[name].size) selectedSize = cart[name].size;
+        cart[name].qty = saved;
+      } else {
+        input.value = 0;
+      }
+
+      // auto-update cart when qty changes; show error if below minimum
+      function currentPriceForSelection() {
+        if (sizeSelect) {
+          return (sizeSelect.value === 'large') ? priceLarge : priceSmall;
+        }
+        return price;
+      }
+
+      input.addEventListener('input', function (e) {
+        var v = parseInt(e.target.value, 10) || 0;
+        if (v > 0 && min > 0 && v < min) {
+          if (err) { err.textContent = 'MINIMUM VALUE ' + min; err.style.display = 'block'; }
+          delete cart[name];
+        } else {
+          if (err) { err.textContent = ''; err.style.display = 'none'; }
+          if (v === 0) delete cart[name]; else {
+            cart[name] = { name: name, price: currentPriceForSelection(), qty: v, img: imgSrc };
+            if (sizeSelect) cart[name].size = sizeSelect.value;
+          }
+        }
+        saveCart();
+      });
+
+      if (sizeSelect) {
+        sizeSelect.addEventListener('change', function () {
+          // when size changes update stored price if qty > 0
+          var v = parseInt(input.value, 10) || 0;
+          if (v > 0) {
+            cart[name] = { name: name, price: currentPriceForSelection(), qty: v, size: sizeSelect.value, img: imgSrc };
+            saveCart();
+          }
+        });
+      }
+
+      // stepper handlers
+      var dec = controls.querySelector('.qty-decrease');
+      var inc = controls.querySelector('.qty-increase');
+      dec.addEventListener('click', function () {
+        var val = parseInt(input.value, 10) || 0; val = Math.max(0, val - 1); input.value = val; input.dispatchEvent(new Event('input'));
+      });
+      inc.addEventListener('click', function () {
+        var val = parseInt(input.value, 10) || 0; val = val + 1; input.value = val; input.dispatchEvent(new Event('input'));
+      });
+    }
+
+    function generateReceiptText() {
+      var lines = [];
+      var total = 0;
+      Object.keys(cart).forEach(function (k) {
+        var it = cart[k];
+        var lineTotal = (it.price || 0) * it.qty;
+        total += lineTotal;
+        lines.push(it.qty + ' x ' + it.name + ' @ ' + formatCurrency(it.price || 0) + ' = ' + formatCurrency(lineTotal));
+      });
+      lines.push('Total: ' + formatCurrency(total));
+      lines.push('Phone: (224) 436-2509');
+      return lines.join('\n');
+    }
+
+    function renderReceipt() {
+      var panel = document.querySelector('.receipt-panel');
+      if (!panel) {
+        panel = document.createElement('aside');
+          panel.className = 'receipt-panel';
+          panel.innerHTML = '<div class="receipt-header"><h4>Your Estimate</h4><button class="receipt-close" aria-label="Close">×</button></div>' +
+            '<div class="receipt-body"></div>' +
+            '<div class="receipt-footer"><div class="receipt-total">Total: <strong class="receipt-total-value">$0.00</strong></div>' +
+            '<div class="receipt-disclaimer">*** THIS IS JUST AN ESTIMATE ***<br>Taxes &amp; fees not included — call (224) 436-2509 for a more accurate estimate.</div>' +
+            '<div class="receipt-actions"><button class="btn btn--white receipt-clear" type="button">Clear</button>' +
+            '<a class="btn btn--ink receipt-request" href="receipt.html">View Receipt</a></div></div>';
+        document.body.appendChild(panel);
+
+        panel.querySelector('.receipt-close').addEventListener('click', function () { panel.classList.toggle('open'); });
+        panel.querySelector('.receipt-clear').addEventListener('click', function () { cart = {}; saveCart(); });
+        // View Receipt button: save current cart to localStorage and open receipt.html
+        panel.querySelector('.receipt-request').addEventListener('click', function (e) {
+          try { localStorage.setItem('qc_last_cart', JSON.stringify(cart || {})); } catch (er) {}
+          // open receipt.html in same site
+          window.open('receipt.html', '_blank');
+          e.preventDefault();
+        });
+      }
+
+      var body = panel.querySelector('.receipt-body');
+      body.innerHTML = '';
+      var total = 0;
+      Object.keys(cart).forEach(function (k) {
+        var it = cart[k];
+        var lineTotal = (it.price || 0) * it.qty;
+        total += lineTotal;
+        var row = document.createElement('div');
+        row.className = 'receipt-row';
+        row.innerHTML = '<div class="receipt-row-name">' + it.name + '</div>' +
+                        '<div class="receipt-row-qty"><input type="number" min="1" value="' + it.qty + '" data-name="' + it.name + '"></div>' +
+                        '<div class="receipt-row-price">' + formatCurrency(lineTotal) + '</div>' +
+                        '<button class="receipt-row-remove" data-name="' + it.name + '" aria-label="Remove">×</button>';
+        body.appendChild(row);
+        row.querySelector('input').addEventListener('change', function (e) {
+          var n = parseInt(e.target.value, 10) || 1;
+          cart[it.name].qty = n;
+          saveCart();
+        });
+        row.querySelector('.receipt-row-remove').addEventListener('click', function () {
+          delete cart[it.name];
+          saveCart();
+        });
+      });
+      var totalEl = panel.querySelector('.receipt-total-value');
+      if (totalEl) totalEl.textContent = formatCurrency(total || 0);
+      // open panel when there are items
+      if (Object.keys(cart).length) panel.classList.add('open'); else panel.classList.remove('open');
+    }
+
+    // Inject controls for each menu item
+      var menuItems = Array.prototype.slice.call(document.querySelectorAll('.menu-item'));
+    var hasMenu = menuItems.length > 0;
+    if (hasMenu) {
+      menuItems.forEach(function (mi) { createEstimatorControls(mi); });
+      // Initial render only on menu page
+      renderReceipt();
+    }
+  })();
 });
