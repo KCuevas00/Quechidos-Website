@@ -2,11 +2,11 @@
    QueChido Taco Catering — design tokens
    Ink #121212 · Charcoal #262626 · Gray-700 #4E4E4E · Gray-400 #9A9A9A
    Gray-200 #E4E4E4 · Off-white #F5F5F4 · White #FFFFFF · Red #8C1B1B
-   Display: Bungee · Body: Work Sans · Eyebrow: Work Sans uppercase
+   Display: Space Grotesk · Body: Inter · Eyebrow: Inter uppercase
    Red is reserved for buttons on white/light sections only.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap');
 
 :root{
   --ink:#121212;
@@ -22,7 +22,7 @@
   --max:1180px;
   --radius:14px;
   --shadow:0 12px 30px rgba(0,0,0,.14);
-  --header-h:96px;
+  --header-h:68px;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -32,21 +32,25 @@ body{
   overflow-x:hidden;
   background:var(--white);
   color:var(--ink);
-  font-family:'Work Sans',sans-serif;
-  font-size:17px;
+  font-family:'Inter',sans-serif;
+  font-size:15px;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
-h1,h2,h3,h4{margin:0 0 .4em;line-height:1.08;font-family:'Bungee',cursive;letter-spacing:.01em;color:var(--ink)}
+h1,h2,h3,h4{margin:0 0 .4em;line-height:1.15;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+h1{font-size:1.85rem}
+h2{font-size:1.4rem}
+h3{font-size:1.05rem}
+h4{font-size:.92rem}
 p{margin:0 0 1em}
 ul{margin:0;padding:0;list-style:none}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
 .eyebrow{
-  font-family:'Work Sans',sans-serif;
+  font-family:'Inter',sans-serif;
   font-weight:700;
-  font-size:.78rem;
+  font-size:.72rem;
   letter-spacing:.14em;
   text-transform:uppercase;
   color:var(--gray-500);
@@ -72,9 +76,9 @@ ul{margin:0;padding:0;list-style:none}
 
 /* ---------- Buttons ---------- */
 .btn{
-  display:inline-flex;align-items:center;gap:.5em;
-  font-family:'Bungee',cursive;font-size:.85rem;letter-spacing:.03em;
-  padding:.95em 1.6em;border-radius:100px;border:2px solid transparent;
+  display:inline-flex;align-items:center;gap:.45em;
+  font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.68rem;letter-spacing:.02em;
+  padding:.62em 1.15em;border-radius:8px;border:1.5px solid transparent;
   cursor:pointer;transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
 }
 .btn:hover{transform:translateY(-2px)}
@@ -158,46 +162,72 @@ header.site.menu-open{
 }
 header.site .wrap{
   display:flex;align-items:center;justify-content:space-between;
-  padding-top:16px;padding-bottom:16px;gap:20px;
+  padding-top:12px;padding-bottom:12px;gap:18px;
   min-height:var(--header-h);
 }
-.brand{display:flex;align-items:center;gap:12px;font-family:'Bungee',cursive;font-size:1.15rem;color:var(--white)}
-.brand img{height:84px;width:auto;transition:height .3s ease}
-header.site.scrolled .brand img{height:52px}
-.brand small{display:block;font-family:'Work Sans',sans-serif;font-weight:600;font-size:.6rem;letter-spacing:.12em;color:var(--gray-400);text-transform:uppercase}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.95rem;color:var(--white)}
+.brand img{height:56px;width:auto;transition:height .3s ease}
+header.site.scrolled .brand img{height:38px}
+.brand small{display:block;font-family:'Inter',sans-serif;font-weight:600;font-size:.6rem;letter-spacing:.12em;color:var(--gray-400);text-transform:uppercase}
 
-nav.main-nav{display:flex;align-items:center;gap:28px}
+nav.main-nav{display:flex;align-items:center;gap:22px}
 nav.main-nav a{
   color:var(--white);
-  font-weight:700;font-size:.92rem;letter-spacing:.02em;
-  padding:6px 2px;border-bottom:3px solid transparent;
+  font-weight:600;font-size:.85rem;letter-spacing:.02em;
+  padding:6px 2px;border-bottom:2px solid transparent;
+  transition:color .15s ease, border-color .15s ease;
 }
 nav.main-nav a:hover,nav.main-nav a.active{border-color:var(--red);color:var(--white)}
-.header-cta{display:flex;align-items:center;gap:16px}
-.phone-pill{
-  display:flex;align-items:center;gap:8px;font-weight:800;font-size:.95rem;color:var(--white);
+.header-cta{display:flex;align-items:center;gap:14px}
+/* Header "Book Catering" button — outlined ghost style, distinct from
+   the solid white CTA buttons used elsewhere on the site */
+.header-cta .btn--white{
+  background:transparent;
+  border:1.5px solid rgba(255,255,255,.55);
+  color:var(--white);
+  box-shadow:none;
 }
-.phone-pill svg{width:18px;height:18px;fill:var(--red)}
+.header-cta .btn--white:hover{
+  background:var(--white);
+  color:var(--ink);
+  border-color:var(--white);
+}
+.phone-pill{
+  display:flex;align-items:center;gap:8px;font-weight:600;font-size:.8rem;color:var(--white);
+}
+.phone-pill svg{
+  width:26px;height:26px;padding:6px;box-sizing:border-box;
+  border-radius:50%;background:var(--red);fill:var(--white);flex-shrink:0;
+}
 
-.social-icons{display:flex;align-items:center;gap:8px}
+.social-icons{display:flex;align-items:center;gap:7px}
 .social-icons a{
-  width:32px;height:32px;border-radius:50%;
+  width:28px;height:28px;border-radius:50%;
   border:1.5px solid rgba(255,255,255,.45);
   display:flex;align-items:center;justify-content:center;color:var(--white);
   transition:background .15s ease, border-color .15s ease;
 }
 .social-icons a:hover{background:rgba(255,255,255,.12);border-color:#fff}
-.social-icons svg{width:15px;height:15px;fill:currentColor}
+.social-icons svg{width:13px;height:13px;fill:currentColor}
 
+/* Modern minimal hamburger — three bars that animate into an X */
 .nav-toggle{
   display:none;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.28);
-  color:var(--white);border-radius:10px;width:44px;height:44px;padding:0;cursor:pointer;
-  transition:background .2s ease, border-color .2s ease;
+  flex-direction:column;gap:5px;
+  background:transparent;border:0;
+  color:var(--white);border-radius:8px;width:36px;height:36px;padding:0;cursor:pointer;
+  transition:background .2s ease;
 }
-.nav-toggle:hover{background:rgba(255,255,255,.16)}
-.nav-toggle svg{width:20px;height:20px}
-header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
+.nav-toggle:hover{background:rgba(255,255,255,.08)}
+.nav-toggle-bar{
+  display:block;width:18px;height:2px;border-radius:2px;
+  background:var(--white);
+  transition:transform .25s ease, opacity .2s ease;
+}
+header.site.menu-open .nav-toggle{background:rgba(255,255,255,.08)}
+header.site.menu-open .nav-toggle-bar:nth-child(1){transform:translateY(7px) rotate(45deg)}
+header.site.menu-open .nav-toggle-bar:nth-child(2){opacity:0}
+header.site.menu-open .nav-toggle-bar:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
 .desktop-only{display:none}
 
@@ -303,8 +333,8 @@ header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
 }
 .card img{aspect-ratio:4/3;object-fit:cover;width:100%;filter:grayscale(.15)}
 .card-body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:8px;flex:1}
-.card-body h3{font-family:'Bungee',cursive;font-size:1.05rem}
-.card-price{font-family:'Bungee',cursive;color:var(--red);font-size:1.05rem}
+.card-body h3{font-family:'Space Grotesk',sans-serif;font-size:1.05rem}
+.card-price{font-family:'Space Grotesk',sans-serif;color:var(--red);font-size:1.05rem}
 .card-body p{color:var(--gray-700);font-size:.95rem;margin-bottom:0}
 .card-cta{margin-top:auto;padding-top:10px}
 .card-cta a{font-weight:800;color:var(--ink);font-size:.85rem;letter-spacing:.02em;border-bottom:2px solid var(--red)}
@@ -355,7 +385,7 @@ header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
 .menu-item img{width:100%;height:100%;object-fit:cover;filter:grayscale(.15)}
 .menu-item-body{padding:22px 24px 22px 0}
 .menu-item-body h3{font-size:1.15rem;margin-bottom:.15em}
-.menu-item-body .price{font-family:'Bungee',cursive;color:var(--red);font-size:1rem;margin-bottom:.5em;display:block}
+.menu-item-body .price{font-family:'Space Grotesk',sans-serif;color:var(--red);font-size:1rem;margin-bottom:.5em;display:block}
 .menu-item-body ul{margin:.6em 0 0;display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
 .menu-item-body li{font-size:.9rem;position:relative;padding-left:16px}
 .menu-item-body li::before{content:"•";color:var(--ink);position:absolute;left:0;font-weight:900}
@@ -466,10 +496,10 @@ header.site.menu-open .nav-toggle{background:var(--red);border-color:var(--red)}
 footer.site{background:var(--ink);color:var(--gray-400)}
 footer.site .wrap{padding-top:64px;padding-bottom:28px}
 .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:36px;padding-bottom:40px}
-.footer-grid h4{color:var(--white);font-family:'Bungee',cursive;font-size:.85rem;margin-bottom:16px;letter-spacing:.03em}
+.footer-grid h4{color:var(--white);font-family:'Space Grotesk',sans-serif;font-size:.85rem;margin-bottom:16px;letter-spacing:.03em}
 .footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .footer-brand img{height:40px}
-.footer-brand span{font-family:'Bungee',cursive;color:var(--white);font-size:1.05rem}
+.footer-brand span{font-family:'Space Grotesk',sans-serif;color:var(--white);font-size:1.05rem}
 .footer-grid p,.footer-grid li{font-size:.9rem;color:var(--gray-400);margin-bottom:8px}
 .footer-grid a:hover{color:var(--white)}
 .footer-socials{display:flex;gap:12px;margin-top:14px}
@@ -514,38 +544,45 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
   .gallery-grid{grid-template-columns:repeat(4,1fr)}
 }
 @media (max-width:720px){
-  header.site{--header-h:88px}
-  .brand img{height:56px}
-  header.site.scrolled .brand img{height:42px}
-  nav.main-nav{position:fixed;inset:var(--header-h) 0 auto 0;background:var(--ink);flex-direction:column;align-items:flex-start;
-    padding:20px 24px 26px;border-bottom:1px solid rgba(255,255,255,.1);gap:16px;opacity:0;visibility:hidden;transition:opacity .3s ease, visibility .3s ease;
+  header.site{--header-h:64px}
+  .brand img{height:40px}
+  header.site.scrolled .brand img{height:34px}
+  nav.main-nav{position:fixed;inset:var(--header-h) 0 auto 0;background:rgba(18,18,18,.98);flex-direction:column;align-items:stretch;
+    padding:14px 16px 20px;border-bottom:1px solid rgba(255,255,255,.08);gap:2px;opacity:0;visibility:hidden;
+    transform:translateY(-6px);transition:opacity .2s ease, visibility .2s ease, transform .2s ease;
     box-shadow:0 16px 30px rgba(0,0,0,.35);}
-  nav.main-nav.open{opacity:1;visibility:visible}
-  nav.main-nav a{font-size:1.05rem;width:100%}
+  nav.main-nav.open{opacity:1;visibility:visible;transform:translateY(0)}
+  /* Tapped items get a soft pill background instead of an underline */
+  nav.main-nav a{
+    font-size:.92rem;width:100%;padding:11px 12px;border-radius:10px;border-bottom:0;
+  }
+  nav.main-nav a:hover,nav.main-nav a.active{
+    border-color:transparent;background:rgba(255,255,255,.08);
+  }
   .nav-toggle{display:inline-flex}
   .desktop-only{display:none}
   .nav-extra{
-    display:flex;flex-direction:column;gap:10px;width:100%;
-    margin-top:8px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);
+    display:flex;flex-direction:column;gap:8px;width:100%;
+    margin-top:6px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);
   }
   .nav-extra .phone-pill,
   .nav-extra .btn{
     width:100%;
     justify-content:center;
     text-align:center;
-    border-radius:100px;
-    padding:13px 18px;
-    font-size:.95rem;
+    border-radius:10px;
+    padding:10px 14px;
+    font-size:.78rem;
   }
   .nav-extra .phone-pill{
     color:var(--white);
-    background:rgba(255,255,255,.08);
-    border:1.5px solid rgba(255,255,255,.28);
-    font-weight:700;
-    font-family:'Work Sans',sans-serif;
-    letter-spacing:.02em;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.15);
+    font-weight:600;
+    font-family:'Inter',sans-serif;
+    letter-spacing:.01em;
   }
-  .nav-extra .phone-pill svg{fill:var(--red);width:17px;height:17px}
+  .nav-extra .phone-pill svg{width:22px;height:22px;padding:5px}
   .nav-extra .btn{
     background:var(--red);
     color:var(--white);
