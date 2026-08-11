@@ -592,6 +592,14 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
     font-weight:700;
     box-shadow:0 8px 20px rgba(140,27,27,.35);
   }
+  /* Use one clear, centered treatment for every page hero on phones. */
+  .hero-inner{
+    width:100%;max-width:560px;
+    margin-inline:auto;
+    text-align:center;
+  }
+  .hero h1,.hero p.lead{margin-left:auto;margin-right:auto}
+  .hero-ctas,.crumbs{justify-content:center}
   .grid-2{grid-template-columns:1fr}
   .grid-3,.testimonials,.grid-4{grid-template-columns:1fr}
   /* Keep the four service highlights compact on phones: two per row instead
