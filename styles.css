@@ -593,7 +593,12 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
     box-shadow:0 8px 20px rgba(140,27,27,.35);
   }
   .grid-2{grid-template-columns:1fr}
-  .grid-3,.testimonials,.feature-row,.grid-4{grid-template-columns:1fr}
+  .grid-3,.testimonials,.grid-4{grid-template-columns:1fr}
+  /* Keep the four service highlights compact on phones: two per row instead
+     of a long single-column stack. */
+  .feature-row{grid-template-columns:repeat(2,1fr);gap:18px 12px}
+  .feature-row .feature img{width:62px;height:62px;margin-bottom:7px;border-width:3px}
+  .feature h4{font-size:.8rem;line-height:1.25;margin:0}
   .event-grid{grid-template-columns:repeat(3,1fr);gap:8px}
   .event-card{padding:12px 4px}
   .event-card .ic{font-size:1.25rem}
