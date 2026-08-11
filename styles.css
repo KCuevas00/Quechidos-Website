@@ -453,6 +453,10 @@ header.site.menu-open .nav-toggle-bar:nth-child(3){transform:translateY(-7px) ro
 .info-item{display:flex;gap:16px;align-items:flex-start}
 .info-item svg{width:26px;height:26px;fill:var(--red);flex-shrink:0;margin-top:2px}
 .info-item strong{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gray-500)}
+.status-badge{display:inline-flex;align-items:center;gap:6px;font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-left:10px;vertical-align:middle;color:var(--gray-500)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--gray-400);flex-shrink:0}
+.status-dot.is-open{background:#2E7D32}
+.status-dot.is-closed{background:var(--red)}
 .hours-table{width:100%;border-collapse:collapse;margin-top:8px}
 .hours-table td{padding:7px 0;border-bottom:1px solid var(--gray-200);font-size:.92rem}
 .hours-table td:last-child{text-align:right;font-weight:700}

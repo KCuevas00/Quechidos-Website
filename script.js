@@ -90,6 +90,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // ---------- Open Now indicator ----------
+  var hoursStatus = document.getElementById('hours-status');
+  if (hoursStatus) {
+    var dot = hoursStatus.querySelector('.status-dot');
+    var text = document.getElementById('hours-status-text');
+    var now = new Date();
+    var hour = now.getHours() + now.getMinutes() / 60;
+    var isOpen = hour >= 10 && hour < 18;
+    dot.classList.add(isOpen ? 'is-open' : 'is-closed');
+    text.textContent = isOpen ? 'Open Now' : 'Closed Now';
+  }
+
   // ---------- Hero video toggle ----------
   var videoToggle = document.querySelector('.hero-video-toggle');
   var heroVideo = document.querySelector('.hero-video--main');
