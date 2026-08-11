@@ -73,6 +73,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // ---------- Pre-check requested package(s) from URL ----------
+  var packageChecks = document.getElementById('package-checks');
+  if (packageChecks) {
+    var params = new URLSearchParams(window.location.search);
+    var requested = params.getAll('package').flatMap(function (v) {
+      return v.split(',');
+    }).map(function (v) { return v.trim().toLowerCase(); });
+
+    if (requested.length) {
+      packageChecks.querySelectorAll('input[type="checkbox"]').forEach(function (box) {
+        if (requested.indexOf(box.value.trim().toLowerCase()) !== -1) {
+          box.checked = true;
+        }
+      });
+    }
+  }
+
   // ---------- Hero video toggle ----------
   var videoToggle = document.querySelector('.hero-video-toggle');
   var heroVideo = document.querySelector('.hero-video--main');

@@ -126,16 +126,16 @@
           <input id="guests" name="guests" type="number" min="1" placeholder="e.g. 50">
         </div>
         <div>
-          <label for="package">Interested package</label>
-          <select id="package" name="package">
-            <option>The Taquiza</option>
-            <option>El Pachanguero</option>
-            <option>Little Taste of Mexico</option>
-            <option>BYO Taco Bar</option>
-            <option>Premium Package</option>
-            <option>Regular Package</option>
-            <option>Not sure yet</option>
-          </select>
+          <label>Interested package(s)</label>
+          <div class="package-checks" id="package-checks">
+            <label class="package-check"><input type="checkbox" name="package-taquiza" value="The Taquiza"><span>The Taquiza</span></label>
+            <label class="package-check"><input type="checkbox" name="package-pachanguero" value="El Pachanguero"><span>El Pachanguero</span></label>
+            <label class="package-check"><input type="checkbox" name="package-littletaste" value="Little Taste of Mexico"><span>Little Taste of Mexico</span></label>
+            <label class="package-check"><input type="checkbox" name="package-byo" value="BYO Taco Bar"><span>BYO Taco Bar</span></label>
+            <label class="package-check"><input type="checkbox" name="package-premium" value="Premium Package"><span>Premium Package</span></label>
+            <label class="package-check"><input type="checkbox" name="package-regular" value="Regular Package"><span>Regular Package</span></label>
+            <label class="package-check"><input type="checkbox" name="package-unsure" value="Not sure yet"><span>Not sure yet</span></label>
+          </div>
         </div>
         <div>
           <label for="message">Tell us about your event</label>
