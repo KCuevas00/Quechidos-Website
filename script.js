@@ -102,6 +102,26 @@ document.addEventListener('DOMContentLoaded', function () {
     text.textContent = isOpen ? 'Open Now' : 'Closed Now';
   }
 
+  // ---------- Dish pill picker (menu.html) ----------
+  document.querySelectorAll('[data-dish-picker]').forEach(function (picker) {
+    var pills = picker.querySelectorAll('.dish-pill');
+    var desc = picker.querySelector('[data-dish-desc]');
+    pills.forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        var alreadyActive = pill.classList.contains('active');
+        pills.forEach(function (p) { p.classList.remove('active'); });
+        if (alreadyActive) {
+          desc.textContent = 'Tap a dish above to see its description.';
+          desc.classList.add('is-placeholder');
+        } else {
+          pill.classList.add('active');
+          desc.textContent = pill.getAttribute('data-desc');
+          desc.classList.remove('is-placeholder');
+        }
+      });
+    });
+  });
+
   // ---------- Hero video toggle ----------
   var videoToggle = document.querySelector('.hero-video-toggle');
   var heroVideo = document.querySelector('.hero-video--main');

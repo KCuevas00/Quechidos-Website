@@ -390,6 +390,27 @@ header.site.menu-open .nav-toggle-bar:nth-child(3){transform:translateY(-7px) ro
 .menu-item-body li{font-size:.9rem;position:relative;padding-left:16px}
 .menu-item-body li::before{content:"•";color:var(--ink);position:absolute;left:0;font-weight:900}
 .menu-note{font-size:.86rem;color:var(--gray-500);font-style:italic;margin-top:.6em}
+.menu-subhead{
+  display:block;font-family:'Inter',sans-serif;font-weight:700;font-size:.72rem;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--gray-500);
+  margin:16px 0 2px;
+}
+/* Dish picker — compact pill row + one shared description box below,
+   so 6 dish blurbs don't turn into 6 stacked accordions. */
+.dish-picker{margin:.6em 0 0}
+.dish-pills{display:flex;flex-wrap:wrap;gap:8px}
+.dish-pill{
+  font-family:'Inter',sans-serif;font-weight:600;font-size:.82rem;color:var(--ink);
+  background:var(--white);border:1.5px solid var(--gray-200);border-radius:100px;
+  padding:7px 13px;cursor:pointer;transition:border-color .15s ease, background .15s ease, color .15s ease;
+}
+.dish-pill:hover{border-color:var(--gray-400)}
+.dish-pill.active{background:var(--red);border-color:var(--red);color:var(--white)}
+.dish-desc{
+  margin:10px 0 0;padding:11px 14px;background:var(--off-white);border-radius:10px;
+  font-size:.86rem;color:var(--gray-700);border-left:3px solid var(--red);
+}
+.dish-desc.is-placeholder{color:var(--gray-500);font-style:italic;border-left-color:var(--gray-200)}
 .extras-box{background:var(--off-white);border:2px dashed var(--gray-400);border-radius:var(--radius);padding:26px 28px;margin-top:10px}
 .extras-box h3{color:var(--ink)}
 
