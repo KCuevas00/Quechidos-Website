@@ -1,11 +1,11 @@
 # Quechidos-
 
-1. add google reviews alongside fb 
+1. change photos to actual images. not links
 
-2. change footer quechidos to full biz namd
+2. change hero to video
 
-3. logo needs to be slightly bigger on default mobile
+3. change text to actual text. placeholders rn
 
-4. form. this website needs a working form 
+4. hero text too much. let video do the talking
 
-5. add a spanish version of entire site w button
+5. make sure menu is correct
