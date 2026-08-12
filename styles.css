@@ -390,6 +390,7 @@ header.site.menu-open .nav-toggle-bar:nth-child(3){transform:translateY(-7px) ro
 .menu-item-body li{font-size:.9rem;position:relative;padding-left:16px}
 .menu-item-body li::before{content:"•";color:var(--ink);position:absolute;left:0;font-weight:900}
 .menu-note{font-size:.86rem;color:var(--gray-500);font-style:italic;margin-top:.6em}
+.menu-item-body li .menu-note{display:inline;margin:0}
 .menu-subhead{
   display:block;font-family:'Inter',sans-serif;font-weight:700;font-size:.72rem;
   text-transform:uppercase;letter-spacing:.08em;color:var(--gray-500);
@@ -576,6 +577,7 @@ footer.site .wrap{padding-top:64px;padding-bottom:28px}
   .menu-item{grid-template-columns:1fr}
   .menu-item img{aspect-ratio:16/9}
   .menu-item-body{padding:20px}
+  .menu-item-body ul{grid-template-columns:1fr}
   .gallery-grid{grid-template-columns:repeat(4,1fr)}
 }
 @media (max-width:720px){
