@@ -90,6 +90,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  
+
   // ---------- Open Now indicator ----------
   var hoursStatus = document.getElementById('hours-status');
   if (hoursStatus) {
